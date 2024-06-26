@@ -35,19 +35,40 @@ class MainActivity : FlutterActivity() {
 
     private fun getSms(): String? {
         val uri = Uri.parse("content://sms/inbox")
-        val cursor: Cursor? = contentResolver.query(uri, arrayOf("address", "body"), null, null, null)
+        val cursor: Cursor? = contentResolver.query(uri, arrayOf("address", "body", "date"), null, null, null)
         val smsArray = JSONArray()
 
         cursor?.use {
             val addressIndex = it.getColumnIndexOrThrow("address")
             val bodyIndex = it.getColumnIndexOrThrow("body")
+            val dateIndex = it.getColumnIndexOrThrow("date")
+
+            /*val idIndex = it.getColumnIndexOrThrow("_id")
+            val threadIdIndex = it.getColumnIndexOrThrow("thread_id")
+            val addressIndex = it.getColumnIndexOrThrow("address")
+            val personIndex = it.getColumnIndexOrThrow("person")
+            val dateIndex = it.getColumnIndexOrThrow("date")
+            val dateSentIndex = it.getColumnIndexOrThrow("date_sent")
+            val protocolIndex = it.getColumnIndexOrThrow("protocol")
+            val readIndex = it.getColumnIndexOrThrow("read")
+            val statusIndex = it.getColumnIndexOrThrow("status")
+            val typeIndex = it.getColumnIndexOrThrow("type")
+            val replyPathPresentIndex = it.getColumnIndexOrThrow("reply_path_present")
+            val subjectIndex = it.getColumnIndexOrThrow("subject")
+            val bodyIndex = it.getColumnIndexOrThrow("body")
+            val serviceCenterIndex = it.getColumnIndexOrThrow("service_center")
+            val lockedIndex = it.getColumnIndexOrThrow("locked")
+            val errorCodeIndex = it.getColumnIndexOrThrow("error_code")
+            val seenIndex = it.getColumnIndexOrThrow("seen")*/
 
             while (it.moveToNext()) {
                 val address = it.getString(addressIndex)
                 val body = it.getString(bodyIndex)
+                val date = it.getLong(dateIndex)
                 val smsObject = JSONObject()
                 smsObject.put("address", address)
                 smsObject.put("body", body)
+                smsObject.put("date", date)
                 smsArray.put(smsObject)
             }
         }

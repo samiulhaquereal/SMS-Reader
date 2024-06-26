@@ -49,13 +49,21 @@ class _MyAppState extends State<MyApp> {
           itemCount: _smsMessages.length,
           itemBuilder: (context, index) {
             final sms = _smsMessages[index];
+            final date = DateTime.fromMillisecondsSinceEpoch(sms['date']);
             log(_smsMessages.toString());
             return Card(
               child: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: sms.containsKey("error")
-                    ? Text(sms["error"]!)
-                    : Text("From: ${sms['address']}\n${sms['body']}"),
+                child: ListTile(
+                  title: Text('From: ${sms['address']}' ?? 'Unknown'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(sms['body'] ?? 'No content'),
+                      Text('Date: ${date.toString()}'),
+                    ],
+                  ),
+                )
               ),
             );
           },
